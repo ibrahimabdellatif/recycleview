@@ -39,7 +39,8 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
      * @param exampleList
      */
     public ExampleAdapter (ArrayList <ExampleItem> exampleList){
-        exampleList = exampleList;
+        // the error it was here
+        this.mExampleList = exampleList;
     }
 
     @NonNull
@@ -64,6 +65,6 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
 
     @Override
     public int getItemCount() {
-        return null!= mExampleList?mExampleList.size():0;
+        return mExampleList.size();
     }
 }
