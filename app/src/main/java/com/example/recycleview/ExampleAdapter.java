@@ -13,7 +13,19 @@ import java.util.ArrayList;
 
 public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleViewHolder> {
 
-        private ArrayList<ExampleItem> mExampleList;
+
+    private ArrayList<ExampleItem> mExampleList;
+    private OnItemClickListener mListener;
+
+    public interface OnItemClickListener {
+        void OnItemClick(int position);
+    }
+
+    //this method will called in main method
+    public void setOnClickListener(OnItemClickListener listener) {
+        mListener = listener;
+
+    }
 
     public static class ExampleViewHolder extends RecyclerView.ViewHolder {
 
@@ -26,19 +38,36 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
          * and after that we passed <ExampleAdapter.ExampleViewHolder> to the parent class and
          * then we implement the required methods.
          **/
-        public ExampleViewHolder(@NonNull View itemView) {
+        public ExampleViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
             mImageView = itemView.findViewById(R.id.imageview);
             mTextView1 = itemView.findViewById(R.id.textview1);
             mTextView2 = itemView.findViewById(R.id.textview2);
+
+            /**
+             * so when click on itemView it will change the status of item
+             */
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // because the class is static we can't access interface directly here so we pass it to constructor
+                    if (listener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION){
+                            listener.OnItemClick(position);
+                        }
+                    }
+                }
+            });
         }
     }
 
     /**
      * we create ExampleAdapter constructor
+     *
      * @param exampleList
      */
-    public ExampleAdapter (ArrayList <ExampleItem> exampleList){
+    public ExampleAdapter(ArrayList<ExampleItem> exampleList) {
         // the error it was here
         this.mExampleList = exampleList;
     }
@@ -50,8 +79,8 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
          * here we create the data for viewHolder and pass layout that contain recycle view
          * after that create new object of ExampleViewHolder class named evh >> and return it .
          */
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.example_item , parent , false);
-        ExampleViewHolder evh = new ExampleViewHolder(v);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.example_item, parent, false);
+        ExampleViewHolder evh = new ExampleViewHolder(v, mListener);
         return evh;
     }
 
