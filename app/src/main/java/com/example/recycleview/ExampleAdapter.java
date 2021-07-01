@@ -1,5 +1,6 @@
 package com.example.recycleview;
 
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
 
     public interface OnItemClickListener {
         void OnItemClick(int position);
+        void OnDeleteClick(int position);
     }
 
     //this method will called in main method
@@ -32,7 +34,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
         public ImageView mImageView;
         public TextView mTextView1;
         public TextView mTextView2;
-
+        public ImageView mDelete;
         /**
          * constructor of example view holder that we created first on be for implement the method
          * and after that we passed <ExampleAdapter.ExampleViewHolder> to the parent class and
@@ -43,6 +45,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
             mImageView = itemView.findViewById(R.id.imageview);
             mTextView1 = itemView.findViewById(R.id.textview1);
             mTextView2 = itemView.findViewById(R.id.textview2);
+            mDelete = itemView.findViewById(R.id.image_delete);
 
             /**
              * so when click on itemView it will change the status of item
@@ -55,6 +58,17 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
                         int position = getAdapterPosition();
                         if (position != RecyclerView.NO_POSITION){
                             listener.OnItemClick(position);
+                        }
+                    }
+                }
+            });
+            mDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION){
+                            listener.OnDeleteClick(position);
                         }
                     }
                 }
